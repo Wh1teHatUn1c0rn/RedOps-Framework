@@ -25,18 +25,31 @@
 ## 📁 Project Structure
 
 RedOps/
+
 ├── core/
+
 │ ├── bypass_suite/ # AMSI, ETW, Defender scripts
+
 │ ├── exploits/ # CVE modules (e.g. log4shell.py, drupalgeddon2.py)
+
 │ ├── secrets_vault.py # Encrypted credential storage
+
 │ ├── cred_harvester.py # Simulated credential collection
+
 │ ├── module_loader.py # Dynamic module listing and importing
+
 │ ├── exploiter.py # Nmap scan + CVE match
+
 │ └── data/
+
 │ └── local_cve_map.json
+
 ├── stager_builder.py # Payload encryptor + loader generator
+
 ├── redops_shell.py # Interactive command-line shell
+
 ├── requirements.txt
+
 └── README.md
 
 
