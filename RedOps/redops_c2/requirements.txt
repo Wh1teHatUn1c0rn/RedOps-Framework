@@ -1,0 +1,17 @@
+from pathlib import Path
+
+requirements = """
+flask
+flask-socketio
+eventlet
+pycryptodome
+requests
+"""
+
+project_root = Path(__file__).resolve().parent.parent
+requirements_path = project_root / "redops_c2" / "requirements.txt"
+requirements_path.parent.mkdir(parents=True, exist_ok=True)
+
+requirements_path.write_text(requirements.strip(), encoding="utf-8")
+
+print(f"[✔] requirements.txt written to: {requirements_path.relative_to(project_root)}")

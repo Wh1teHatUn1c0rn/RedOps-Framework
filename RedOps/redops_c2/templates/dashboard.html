@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RedOps C2 Dashboard</title>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>RedOps C2 Dashboard</h2>
+
+    <h3>Queue New Task</h3>
+    <form id="taskForm">
+        Agent ID: <input type="text" id="agent_id" required>
+        Command: <input type="text" id="command" required>
+        <button type="submit">Queue Task</button>
+    </form>
+
+    <h3>Online Agents</h3>
+    <ul id="agents"></ul>
+
+    <h3>New Results</h3>
+    <ul id="results"></ul>
+
+    <script>
+        const socket = io();
+
+        socket.on('new_agent', function(data) {
+            const agentList = document.getElementById("agents");
+            const item = document.createElement("li");
+            item.textContent = `Agent ${data.id}: ${data.hostname} (${data.ip})`;
+            agentList.appendChild(item);
+        });
+
+        socket.on('new_result', function(data) {
+            const resultList = document.getElementById("results");
+            const item = document.createElement("li");
+            item.textContent = `Task ${data.task_id}: ${data.output}`;
+            resultList.appendChild(item);
+        });
+
+        document.getElementById("taskForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const agentId = document.getElementById("agent_id").value;
+            const command = document.getElementById("command").value;
+
+            fetch('/add-task', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agent_id: agentId, command: command })
+            }).then(res => res.json()).then(data => {
+                alert(data.message);
+            });
+        });
+    </script>
+</body>
+</html>
+
+project_root = Path(__file__).resolve().parent.parent
+dashboard_path = project_root / "redops_c2" / "templates" / "dashboard.html"
+dashboard_path.parent.mkdir(parents=True, exist_ok=True)
+
+# Write the file
+dashboard_path.write_text(dashboard_html_with_form.strip(), encoding="utf-8")
+
+print(f"[✔] Dashboard created at: {dashboard_path.relative_to(project_root)}")
+

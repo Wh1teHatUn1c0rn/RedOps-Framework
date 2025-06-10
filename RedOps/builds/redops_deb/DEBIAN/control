@@ -1,0 +1,7 @@
+Package: redops
+Version: 1.0
+Section: pentest
+Priority: optional
+Architecture: all
+Maintainer: OffensiveUn1cornCrew
+Description: RedOps Recon Suite - Modular Red Teaming Toolkit

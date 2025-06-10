@@ -1,0 +1,46 @@
+import os
+import sqlite3
+
+# Setup directories for redops_c2 dashboard
+c2_root = "/mnt/data/redops_c2"
+os.makedirs(os.path.join(c2_root, "templates"), exist_ok=True)
+os.makedirs(os.path.join(c2_root, "static"), exist_ok=True)
+os.makedirs(os.path.join(c2_root, "db"), exist_ok=True)
+
+# Step 1: Create SQLite database with required tables
+db_path = os.path.join(c2_root, "db", "c2.db")
+conn = sqlite3.connect(db_path)
+cursor = conn.cursor()
+
+cursor.executescript("""
+DROP TABLE IF EXISTS agents;
+DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS results;
+
+CREATE TABLE agents (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    hostname TEXT,
+    ip TEXT,
+    last_seen DATETIME
+);
+
+CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    agent_id INTEGER,
+    command TEXT,
+    status TEXT
+);
+
+CREATE TABLE results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    output TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+""")
+
+conn.commit()
+conn.close()
+
+# Confirm the database is set up
+db_path

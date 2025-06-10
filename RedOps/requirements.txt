@@ -1,0 +1,22 @@
+from pathlib import Path
+
+# Dynamically resolve project root
+try:
+    project_root = Path(__file__).resolve().parent
+except NameError:
+    project_root = Path.cwd()
+
+# Path to requirements.txt
+requirements_path = project_root / "RedOps" / "requirements.txt"
+requirements_path.parent.mkdir(parents=True, exist_ok=True)
+
+# Define RedOps dependencies
+requirements_content = """
+requests
+pycryptodome
+"""
+
+# Write to requirements.txt with a final newline
+requirements_path.write_text(requirements_content.strip() + "\n")
+
+print(f"[✔] Created: {requirements_path.resolve()}")
