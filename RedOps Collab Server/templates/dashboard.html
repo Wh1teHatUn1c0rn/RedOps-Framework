@@ -1,0 +1,147 @@
+from pathlib import Path
+
+# Get the base project directory
+project_root = Path(__file__).resolve().parents[0]
+
+# Define the dashboard path
+dashboard_path = project_root / "builds" / "redops_collab_server" / "templates" / "dashboard.html"
+dashboard_path.parent.mkdir(parents=True, exist_ok=True)
+
+dashboard_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RedOps Collaboration Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 1.5rem;
+            background-color: #121212;
+            color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+            color: #ff4b4b;
+        }
+        form {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        input, button {
+            padding: 0.6rem;
+            border-radius: 5px;
+            border: none;
+        }
+        input {
+            margin-bottom: 0.5rem;
+        }
+        button {
+            background-color: #ff4b4b;
+            color: white;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #1f1f1f;
+        }
+        tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+        .status-success {
+            color: #00ff00;
+        }
+        .status-fail {
+            color: #ff4b4b;
+        }
+    </style>
+    <script>
+        setTimeout(() => {
+            window.location.reload();
+        }, 30000);
+
+        function filterLogs() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>RedOps Collaboration Dashboard</h1>
+
+    <form id="logForm">
+        <input type="text" name="operator" placeholder="Operator" required>
+        <input type="text" name="module" placeholder="Module" required>
+        <input type="text" name="target" placeholder="Target" required>
+        <input type="text" name="result" placeholder="Result (e.g., success/fail)" required>
+        <button type="submit">Submit Log</button>
+    </form>
+
+    <input type="text" id="searchInput" onkeyup="filterLogs()" placeholder="Search logs..." style="width: 100%; padding: 0.75rem; margin-top: 2rem; border-radius: 5px;">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Operator</th>
+                <th>Module</th>
+                <th>Target</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log[0] }}</td>
+                <td>{{ log[1] }}</td>
+                <td>{{ log[2] }}</td>
+                <td>{{ log[3] }}</td>
+                <td class="status-{{ 'success' if 'success' in log[4]|lower else 'fail' }}">{{ log[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById('logForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = {
+                operator: form.operator.value,
+                module: form.module.value,
+                target: form.target.value,
+                result: form.result.value
+            };
+            await fetch('/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            form.reset();
+            location.reload();
+        });
+    </script>
+</body>
+</html>
+"""
+
+dashboard_path.write_text(dashboard_html.strip())
+print(dashboard_path.resolve().as_posix())
