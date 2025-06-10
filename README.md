@@ -19,6 +19,7 @@
 -  **Module Loader** for dynamic loading of core modules
 -  **Local CVE Mapping DB** for offline CVE detection
 -  **Task CLI** for manual task queuing via `add_task.py`
+-  **More Updates coming soon
 
 ---
 
