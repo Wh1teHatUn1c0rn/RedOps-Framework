@@ -1,7 +1,7 @@
 # RedOps Framework
 
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![License](https://img.shields.io/badge/license-Proprietary-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 ![Status](https://img.shields.io/badge/build-stable-green)
 
 **RedOps** is a modular, extensible red teaming and adversary simulation framework designed to help security professionals simulate realistic post-exploitation scenarios, credential harvesting, privilege escalation, lateral movement, evasion, and more.
