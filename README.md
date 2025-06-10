@@ -64,7 +64,24 @@ cd redops-framework
 
 pip install -r requirements.txt
 
-Requires: nmap, searchsploit, requests, cryptography, flask, flask-socketio, eventlet
+Requires: # RedOps Framework Requirements
+
+# Shell & Console
+rich
+prompt_toolkit
+
+# Exploitation & Network Tools
+requests
+nmap
+searchsploit
+
+# Encryption
+cryptography
+
+# C2 Dashboard
+flask
+flask-socketio
+eventlet
 
 python redops_shell.py
 
